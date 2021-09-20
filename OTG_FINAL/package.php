@@ -53,7 +53,7 @@
             </div>
         </div>
         <!-- Page Header End -->
-        
+
 
         <!-- Booking Start -->
         <div class="booking">
@@ -120,11 +120,11 @@
                                               $p_id = $_POST['package_id'];
 
 
-                                              $records = mysqli_query($db, "SELECT name From hotel WHERE p_id='$p_id'");  // Use select query here
+                                              $records = mysqli_query($db, "SELECT h_name From hotel WHERE p_id='$p_id'");  // Use select query here
 
                                               while($data = mysqli_fetch_array($records))
                                               {
-                                                  echo "<option value='". $data['name'] ."'>" .$data['name'] ."</option>";  // displaying data in option menu
+                                                  echo "<option value='". $data['h_name'] ."'>" .$data['h_name'] ."</option>";  // displaying data in option menu
                                               }
                                               mysqli_close($db);
                                           ?>
@@ -149,11 +149,11 @@
                                               $p_id = $_POST['package_id'];
 
 
-                                              $records = mysqli_query($db, "SELECT name From transport WHERE p_id='$p_id'");  // Use select query here
+                                              $records = mysqli_query($db, "SELECT trans_name From transport WHERE p_id='$p_id'");  // Use select query here
 
                                               while($data = mysqli_fetch_array($records))
                                               {
-                                                  echo "<option value='". $data['name'] ."'>" .$data['name'] ."</option>";  // displaying data in option menu
+                                                  echo "<option value='". $data['trans_name'] ."'>" .$data['trans_name'] ."</option>";  // displaying data in option menu
                                               }
                                               mysqli_close($db);
                                           ?>

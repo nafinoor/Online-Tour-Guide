@@ -63,7 +63,7 @@
         <!-- comment show Start -->
         <div class="col-md-6">
 
-        <div class="col-lg-7">
+        <center><div class="col-lg-7">
           <p><center><h1>ADMIN PANEL</h1></center></p>
             <?php
                 $host = "localhost";
@@ -78,7 +78,7 @@
 
 
 
-                $sql = "SELECT * FROM booking ";
+                $sql = "SELECT * FROM booking  , user  , transport  , hotel  , package  WHERE booking.user_id = user.user_id AND booking.p_id = package.p_id AND booking.h_id = hotel.h_id AND booking.trans_id = transport.trans_id ORDER BY booking.b_id ASC";
                 $result = $con->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -88,13 +88,16 @@
                   <tr>
                   <th>Booking ID</th>
                   <th>USER ID</th>
+                  <th>USER NAME</th>
+                  <th>EMAIL ID</th>
+                  <th>CONTACT</th>
                   <th>PACKAGE ID</th>
+                  <th>TRANSPORT</th>
+                  <th>HOTEL</th>
                   <th>DATE</th>
                   <th>TIME</th>
-                  <th>CONTACT</th>
                   <th>No. Of Person</th>
-                  <th>TRANSPORT ID</th>
-                  <th>HOTEL ID</th>
+                  <th>Amount</th>
                   </tr>";
 
                   while($row = mysqli_fetch_array($result))
@@ -102,13 +105,16 @@
                   echo "<tr>";
                   echo "<td>" . $row['b_id'] . "</td>";
                   echo "<td>" . $row['user_id'] . "</td>";
+                  echo "<td>" . $row['fname'] . "</td>";
+                  echo "<td>" . $row['email_id'] . "</td>";
+                  echo "<td>" . $row['mobile'] . "</td>";
                   echo "<td>" . $row['p_id'] . "</td>";
+                  echo "<td>" . $row['trans_name'] . "</td>";
+                  echo "<td>" . $row['h_name'] . "</td>";
                   echo "<td>" . $row['d_date'] . "</td>";
                   echo "<td>" . $row['d_time'] . "</td>";
-                  echo "<td>" . $row['mobile'] . "</td>";
                   echo "<td>" . $row['noOfPerson'] . "</td>";
-                  echo "<td>" . $row['trans_id'] . "</td>";
-                  echo "<td>" . $row['h_id'] . "</td>";
+                  echo "<td>" . ($row['h_fare']+$row['trans_fare']+$row['p_cost'])*$row['noOfPerson'] . "</td>";
                   echo "</tr>";
                   }
                   echo "</table>";
@@ -156,7 +162,7 @@
                     <p>Copyright &copy; <a href="#">OTG2021</a>, All Right Reserved.</p>
 
                 </div>
-            </div>
+            </div></center>
         </div>
         <!-- Footer End -->
 

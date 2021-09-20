@@ -18,19 +18,24 @@
   $transName = $_POST['transName'];
 
   //hotel
-  $hotelSql = "select * from hotel where name='$hname'";
+  $hotelSql = "SELECT * FROM hotel WHERE hotel.h_name ='$hname'";
   $result = mysqli_query($db, $hotelSql);
   $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
 
   //transport
-  $transSql = "select * from transport where name='$transName'";
+  $transSql = "SELECT * FROM transport WHERE transport.trans_name ='$transName'";
   $r = mysqli_query($db, $transSql);
   $rowt = mysqli_fetch_array($r, MYSQLI_ASSOC);
 
+  //package
+  $pSql = "SELECT * FROM package WHERE package.p_id ='$p_id'";
+  $ro = mysqli_query($db, $pSql);
+  $rowp = mysqli_fetch_array($ro, MYSQLI_ASSOC);
+
 
   // database insert SQL code
-  $sql = "INSERT INTO `booking` (`p_id`, `user_id`, `d_date`, `d_time`, `mobile`, `noOfPerson`,`h_id`,`trans_id` ) VALUES ('$p_id', '$user_id', '$d_date', '$d_time','$mobile','$person','$row[h_id]','$rowt[trans_id]')";
+  $sql = "INSERT INTO `booking` (`user_id`, `p_id`, `d_date`, `d_time`, `mobile`, `noOfPerson`,`h_id`,`trans_id` ) VALUES ('$user_id', '$p_id', '$d_date', '$d_time','$mobile','$person','$row[h_id]','$rowt[trans_id]')";
 
   // insert in database
 
@@ -39,9 +44,9 @@
 
   if($rs)
   {
-    $records = mysqli_query($db, "select * FROM booking b, user u, transport t, hotel h, package p where b.user_id = '$user_id' and b.mobile = '$mobile' and b.user_id = u.user_id AND b.p_id=p.p_id AND b.h_id = h.h_id AND b.trans_id = t.trans_id");
+    $records = mysqli_query($db, "SELECT * from booking WHERE user_id = '$user_id' and mobile = '$mobile' AND d_date = '$d_date' AND d_time = '$d_time'");
     $data = mysqli_fetch_array($records);
-    echo "<script>alert('Booking Confirmed. Your Booking ID is: $data[b_id].');document.location='http://localhost/OTG/showReview.php'</script>";
-
+    $amount =  ($row['h_fare']+$rowt['trans_fare']+$rowp['p_cost'])*$data['noOfPerson'] ;
+    echo "<script>alert('Your BOOKING ID is: $data[b_id]. Amount to be paid = $amount TK. Please note this down for future.');document.location='http://localhost/OTG/showReview.php'</script>";
 }
 ?>

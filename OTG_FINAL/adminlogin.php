@@ -27,7 +27,7 @@
 
 
         if($count == 1){
-          echo "<script>alert('Welcome $row[name]!');document.location='http://localhost/OTG/showBooking.php'</script>";
+          echo "<script>alert('Welcome $row[admin_name]!');document.location='http://localhost/OTG/showBooking.php'</script>";
         }
         else{
           echo "<script>alert('Please enter valid user id and password');document.location='http://localhost/OTG/adminlogin.html'</script>";

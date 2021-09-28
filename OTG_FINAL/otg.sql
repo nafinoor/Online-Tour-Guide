@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 19, 2021 at 10:27 PM
+-- Generation Time: Sep 28, 2021 at 07:42 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.7
 
@@ -31,7 +31,7 @@ USE `otg`;
 
 CREATE TABLE `admin` (
   `admin_id` int(11) NOT NULL,
-  `name` varchar(45) NOT NULL,
+  `admin_name` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -39,7 +39,7 @@ CREATE TABLE `admin` (
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`admin_id`, `name`, `password`) VALUES
+INSERT INTO `admin` (`admin_id`, `admin_name`, `password`) VALUES
 (801, 'Paul', '7890'),
 (802, 'kumar', '6543');
 
@@ -71,7 +71,9 @@ INSERT INTO `booking` (`b_id`, `user_id`, `p_id`, `d_date`, `d_time`, `mobile`, 
 (3003, 5003, 4001, '2021-09-09', '20:04', '01306989647', '2', 9001, 7001),
 (3004, 5004, 4003, '2021-09-07', '19:06', '0169999999', '1', 9005, 7004),
 (3005, 5005, 4003, '2021-10-01', '15:38', '01987525417', '2', 9005, 7004),
-(3006, 5011, 4003, '2021-09-22', '', '01892222222', '1', 9005, 7004);
+(3006, 5014, 4002, '2021-09-22', '', '0179999999', '1', 9004, 7003),
+(3007, 5005, 4002, '2021-10-09', '16:00', '01788888888', '4', 9004, 7003),
+(3008, 5017, 4001, '2021-09-08', '16:14', '0189999999', '5', 9001, 7001);
 
 -- --------------------------------------------------------
 
@@ -81,7 +83,7 @@ INSERT INTO `booking` (`b_id`, `user_id`, `p_id`, `d_date`, `d_time`, `mobile`, 
 
 CREATE TABLE `hotel` (
   `h_id` int(11) NOT NULL,
-  `name` varchar(45) NOT NULL,
+  `h_name` varchar(45) NOT NULL,
   `h_fare` int(11) NOT NULL,
   `p_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -90,10 +92,10 @@ CREATE TABLE `hotel` (
 -- Dumping data for table `hotel`
 --
 
-INSERT INTO `hotel` (`h_id`, `name`, `h_fare`, `p_id`) VALUES
+INSERT INTO `hotel` (`h_id`, `h_name`, `h_fare`, `p_id`) VALUES
 (7001, 'Hotel Diana Residential', 1000, 4001),
 (7002, 'New Ekota Residential Hotel', 800, 4001),
-(7003, 'HOTEL SHALIMAR INT\'L (RESIDENTIAL)', 1100, 4002),
+(7003, 'HOTEL SHALIMAR INTL RESIDENTIAL', 1100, 4002),
 (7004, 'HOTEL METROPOLITAN INTL', 1200, 4003);
 
 -- --------------------------------------------------------
@@ -138,7 +140,9 @@ INSERT INTO `review` (`t_id`, `tourist_spot`, `review_details`, `user_id`) VALUE
 (1001, 'cox bazar', 'good', 5001),
 (1002, 'Sajek', 'great', 5002),
 (1003, 'Kuakata', 'excellent.', 5003),
-(1006, 'Kuakata', 'Kub Nice Lagsa.', 5001);
+(1006, 'Kuakata', 'Kub Nice Lagsa.', 5001),
+(1007, 'dhaka', 'good', 5005),
+(1008, 'dhaka', 'best', 5017);
 
 -- --------------------------------------------------------
 
@@ -168,7 +172,7 @@ CREATE TABLE `showbooking` (
 
 CREATE TABLE `transport` (
   `trans_id` int(11) NOT NULL,
-  `name` varchar(45) NOT NULL,
+  `trans_name` varchar(45) NOT NULL,
   `trans_fare` int(11) NOT NULL,
   `p_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -177,7 +181,7 @@ CREATE TABLE `transport` (
 -- Dumping data for table `transport`
 --
 
-INSERT INTO `transport` (`trans_id`, `name`, `trans_fare`, `p_id`) VALUES
+INSERT INTO `transport` (`trans_id`, `trans_name`, `trans_fare`, `p_id`) VALUES
 (9001, 'ENA ENTERPRISE', 500, 4001),
 (9002, 'RAIDA DELUXE', 900, 4001),
 (9003, 'HANIF ENTERPRISE', 600, 4002),
@@ -214,7 +218,8 @@ INSERT INTO `user` (`user_id`, `fname`, `lname`, `email_id`, `password`) VALUES
 (5012, 'Jenny', 'Kumar', 'j.kumar@yahoo.com', '5680'),
 (5013, 'Jenny', 'Kumar', 'j.kumar@yahoo.com', '5680'),
 (5014, 'Jenny', 'K', 'j.kumar@ovi.com', '23'),
-(5016, 'Nishat', 'Noor', 'nishat_noor@gmail.com', '12345');
+(5016, 'Nishat', 'Noor', 'nishat_noor@gmail.com', '12345'),
+(5017, 'red', 'john', 'r.john@gmail.com', '12345');
 
 -- --------------------------------------------------------
 
@@ -223,7 +228,7 @@ INSERT INTO `user` (`user_id`, `fname`, `lname`, `email_id`, `password`) VALUES
 --
 DROP TABLE IF EXISTS `showbooking`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `showbooking`  AS SELECT DISTINCT `b`.`b_id` AS `Booking ID`, `b`.`user_id` AS `USER ID`, `u`.`fname` AS `User Name`, `u`.`email_id` AS `Email ID`, `b`.`mobile` AS `Contact`, `p`.`p_id` AS `Package ID`, `t`.`name` AS `Transport`, `h`.`name` AS `Hotel`, `b`.`d_date` AS `Date`, `b`.`d_time` AS `Time`, (`h`.`h_fare` + `p`.`p_cost` + `t`.`trans_fare`) * `b`.`noOfPerson` AS `Amount(TK)` FROM ((((`booking` `b` join `user` `u`) join `transport` `t`) join `hotel` `h`) join `package` `p`) WHERE `b`.`user_id` = `u`.`user_id` AND `b`.`p_id` = `p`.`p_id` AND `b`.`h_id` = `h`.`h_id` AND `b`.`trans_id` = `t`.`trans_id` GROUP BY `b`.`d_date` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `showbooking`  AS SELECT DISTINCT `b`.`b_id` AS `Booking ID`, `b`.`user_id` AS `USER ID`, `u`.`fname` AS `User Name`, `u`.`email_id` AS `Email ID`, `b`.`mobile` AS `Contact`, `p`.`p_id` AS `Package ID`, `t`.`trans_name` AS `Transport`, `h`.`h_name` AS `Hotel`, `b`.`d_date` AS `Date`, `b`.`d_time` AS `Time`, (`h`.`h_fare` + `p`.`p_cost` + `t`.`trans_fare`) * `b`.`noOfPerson` AS `Amount(TK)` FROM ((((`booking` `b` join `user` `u`) join `transport` `t`) join `hotel` `h`) join `package` `p`) WHERE `b`.`user_id` = `u`.`user_id` AND `b`.`p_id` = `p`.`p_id` AND `b`.`h_id` = `h`.`h_id` AND `b`.`trans_id` = `t`.`trans_id` ;
 
 --
 -- Indexes for dumped tables
@@ -292,7 +297,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `b_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3007;
+  MODIFY `b_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3009;
 
 --
 -- AUTO_INCREMENT for table `hotel`
@@ -310,7 +315,7 @@ ALTER TABLE `package`
 -- AUTO_INCREMENT for table `review`
 --
 ALTER TABLE `review`
-  MODIFY `t_id` int(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1007;
+  MODIFY `t_id` int(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1009;
 
 --
 -- AUTO_INCREMENT for table `transport`
@@ -322,7 +327,7 @@ ALTER TABLE `transport`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5017;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5018;
 
 --
 -- Constraints for dumped tables

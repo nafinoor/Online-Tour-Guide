@@ -100,7 +100,7 @@
                   <th>Amount</th>
                   </tr>";
 
-                  while($row = mysqli_fetch_array($result))
+                  while($row = mysqli_fetch_assoc($result))
                   {
                   echo "<tr>";
                   echo "<td>" . $row['b_id'] . "</td>";
